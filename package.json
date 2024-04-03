@@ -1,21 +1,36 @@
 {
-  "name": "gpt-code-reviewer",
-  "displayName": "gpt-code-reviewer",
+  "name": "code-review-assistant",
+  "displayName": "code-review-assistant",
   "description": "Code review files with AI",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.87.0"
   },
   "categories": [
-    "Other"
+    "AI"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Code Review Assistant",
+      "properties": {
+        "code-review-assistant.OPEN_AI_API_KEY": {
+          "type": "string",
+          "default": "",
+          "description": "Your OpenAI API key for accessing the GPT API."
+        },
+        "code-review-assistant.MODEL_VERSION": {
+          "type": "string",
+          "default": "",
+          "description": "The model version to use. Defaults to gpt-3.5-turbo."
+        }
+      }
+    },
     "commands": [
       {
-        "command": "gpt-code-reviewer.helloWorld",
-        "title": "Hello World"
+        "command": "code-review-assistant.analyzeFile",
+        "title": "Code review current file with GPT"
       }
     ]
   },
@@ -31,17 +46,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.87.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
+    "@types/vscode": "^1.87.0",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.3.3",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
     "@vscode/test-cli": "^0.0.8",
-    "@vscode/test-electron": "^2.3.9"
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "openai": "^4.32.1"
   }
 }
