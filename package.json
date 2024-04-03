@@ -2,13 +2,20 @@
   "name": "code-review-assistant",
   "displayName": "code-review-assistant",
   "description": "Code review files with AI",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "publisher": "bonham000",
+  "author": {
+    "name": "bonham000"
+  },
   "engines": {
     "vscode": "^1.87.0"
   },
   "categories": [
     "AI"
   ],
+  "repository": {
+    "git": "https://github.com/bonham000/code-review-assistant"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -22,7 +29,7 @@
         },
         "code-review-assistant.MODEL_VERSION": {
           "type": "string",
-          "default": "",
+          "default": "gpt-3.5-turbo",
           "description": "The model version to use. Defaults to gpt-3.5-turbo."
         }
       }

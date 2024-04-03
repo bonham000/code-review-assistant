@@ -47,7 +47,7 @@ async function analyzeFileContents(fileContents: string) {
 	`;
   const model = getModelVersion();
   vscode.window.showInformationMessage(
-    `🧑‍💻 Generating a code review with ${model} - please wait a moment.`
+    `🧑‍💻 Generating a code review with ${model}...`
   );
   let review = null;
   try {
