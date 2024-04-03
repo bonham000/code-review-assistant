@@ -16,7 +16,6 @@
   "repository": {
     "git": "https://github.com/bonham000/code-review-assistant"
   },
-  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
