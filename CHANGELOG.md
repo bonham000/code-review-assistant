@@ -7,3 +7,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.0.1]
 
 - Initial release.
+
+## [0.0.2]
+
+- Minor update.
+
+## [0.0.3]
+
+- Add configuration option to enable opening markdown preview.
+
+## [0.0.4]
+
+- Minor update.

@@ -1,8 +1,8 @@
 {
   "name": "code-review-assistant",
-  "displayName": "code-review-assistant",
-  "description": "Code review files with AI",
-  "version": "0.0.1",
+  "displayName": "Code Review Assistant",
+  "description": "Code review files with AI (GPT 3.5 or 4.0 supported).",
+  "version": "0.0.4",
   "publisher": "bonham000",
   "author": {
     "name": "bonham000"
@@ -10,9 +10,6 @@
   "engines": {
     "vscode": "^1.87.0"
   },
-  "categories": [
-    "AI"
-  ],
   "repository": {
     "git": "https://github.com/bonham000/code-review-assistant"
   },
@@ -26,8 +23,11 @@
       "properties": {
         "code-review-assistant.OPEN_AI_API_KEY": {
           "type": "string",
-          "default": "",
           "description": "Your OpenAI API key for accessing the GPT API."
+        },
+        "code-review-assistant.OPEN_MARKDOWN_PREVIEW": {
+          "type": "boolean",
+          "description": "Whether the markdown preview should be opened by default or not."
         },
         "code-review-assistant.MODEL_VERSION": {
           "type": "string",

@@ -1,14 +1,19 @@
 import * as vscode from "vscode";
 import OpenAI from "openai";
 
-async function getApiKey(): Promise<string | undefined> {
-  const config = vscode.workspace.getConfiguration("code-review-assistant");
-  return config.get<string>("OPEN_AI_API_KEY");
-}
+type Config = {
+  api_key: string | undefined;
+  model_version: string;
+  open_markdown_preview: boolean;
+};
 
-function getModelVersion(): string {
+function getConfig(): Config {
   const config = vscode.workspace.getConfiguration("code-review-assistant");
-  return config.get<string>("MODEL_VERSION", "gpt-3.5-turbo");
+  return {
+    api_key: config.get<string>("OPEN_AI_API_KEY"),
+    model_version: config.get<string>("MODEL_VERSION", "gpt-3.5-turbo"),
+    open_markdown_preview: config.get<boolean>("OPEN_MARKDOWN_PREVIEW", false),
+  };
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -28,32 +33,32 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 async function analyzeFileContents(fileContents: string) {
-  const apiKey = await getApiKey();
-  if (!apiKey) {
+  const { api_key, model_version, open_markdown_preview } = await getConfig();
+  if (!api_key) {
     vscode.window.showWarningMessage(
-      "Cannot initialize without an OpenAI API key. Please check the README to include your API key."
+      "Cannot initialize without an OpenAI API key."
     );
     return;
   }
 
   const openai = new OpenAI({
-    apiKey,
+    apiKey: api_key,
   });
 
   const content = `
-	You are a Senior Software Engineer reviewing some code. This is one file for you to review. Please write a review in text and markdown, using code snippets where needed. The review should be concise, and easy to read quickly. Here is the code:
+	You are a Senior Software Engineer reviewing some code. This is one file for you to review. Please write a review in text and markdown, using code snippets where needed. The review should be concise, and easy to read quickly. The most important thing is to identify any bugs, problems or improvements which could be made. Here is the code:
 
 	${fileContents}
 	`;
-  const model = getModelVersion();
+
   vscode.window.showInformationMessage(
-    `🧑‍💻 Generating a code review with ${model}...`
+    `🧑‍💻 Generating a code review with ${model_version}...`
   );
   let review = null;
   try {
     const completion = await openai.chat.completions.create({
       messages: [{ content, role: "user" }],
-      model,
+      model: model_version,
     });
     review = completion.choices[0].message.content;
   } catch (err) {
@@ -66,6 +71,7 @@ async function analyzeFileContents(fileContents: string) {
 
   if (review === null) {
     vscode.window.showErrorMessage("Failed to find a review in the response.");
+    return;
   }
 
   vscode.window.showInformationMessage(
@@ -79,10 +85,12 @@ async function analyzeFileContents(fileContents: string) {
       .then((editor) => {
         editor
           .edit((edit) => {
-            edit.insert(new vscode.Position(0, 0), review!);
+            edit.insert(new vscode.Position(0, 0), review);
           })
           .then(() => {
-            vscode.commands.executeCommand("markdown.showPreview", uri);
+            if (open_markdown_preview) {
+              vscode.commands.executeCommand("markdown.showPreview", uri);
+            }
           });
       });
   });
